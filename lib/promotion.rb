@@ -1,0 +1,3 @@
+class Promotion
+
+end

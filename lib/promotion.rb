@@ -12,7 +12,13 @@ class Promotion
     raise NotImplementedError, 'Should be implemented by a subclass'
   end
 
-  def applicable?(_entity)
-    raise NotImplementedError, 'Should be implemented by a subclass'
+  def applicable?(entity)
+    if entity.respond_to?(:code)
+      promotable_products.include?(entity.code)
+    elsif entity.respond_to?(:line_items)
+      entity.line_items.any? { |li| applicable?(li) }
+    else
+      false
+    end
   end
 end

@@ -17,6 +17,6 @@ class BuyOneGetOnePromotion < Promotion
   def apply(checkout)
     checkout.line_items
             .select { |li| applicable?(li) }
-            .each { |li| li.quantity += 1 }
+            .each { |li| li.quantity *= 2 }
   end
 end

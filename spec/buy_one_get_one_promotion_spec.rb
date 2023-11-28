@@ -47,26 +47,44 @@ describe BuyOneGetOnePromotion do
   describe '#apply' do
     let(:promo) { subject }
 
-    before do
-      [foo, baz].each { |mock| allow(mock).to receive(:quantity=).with(anything) }
-      allow(checkout).to receive(:line_items).and_return [foo, baz]
+    context 'when line_items have low quantity' do
+      before do
+        [foo, baz].each { |mock| allow(mock).to receive(:quantity=).with(anything) }
+        allow(checkout).to receive(:line_items).and_return [foo, baz]
+      end
+
+      it 'increases the quantity of applicable line_items by 1' do
+        allow(promo).to receive(:applicable?).with(anything).and_return true
+
+        promo.apply(checkout)
+        expect(foo).to have_received(:quantity=).with(2)
+        expect(baz).to have_received(:quantity=).with(2)
+      end
+
+      it 'does not increase the quantity of non-applicable line_items' do
+        allow(promo).to receive(:applicable?).with(foo).and_return false
+        allow(promo).to receive(:applicable?).with(baz).and_return true
+
+        promo.apply(checkout)
+        expect(foo).not_to have_received(:quantity=)
+        expect(baz).to have_received(:quantity=).with(2)
+      end
     end
 
-    it 'increases the quantity of applicable line_items by 1' do
-      allow(promo).to receive(:applicable?).with(anything).and_return true
+    context 'when line_items have high quantity' do
+      let(:bar) { instance_double("LineItem", code: 'BAZ', price: 1.99, quantity: 3) }
 
-      promo.apply(checkout)
-      expect(foo).to have_received(:quantity=).with(2)
-      expect(baz).to have_received(:quantity=).with(2)
-    end
+      before do
+        allow(promo).to receive(:applicable?).with(bar).and_return true
+        allow(bar).to receive(:quantity=).with(anything)
+        allow(checkout).to receive(:line_items).and_return [bar]
+      end
 
-    it 'does not increase the quantity of non-applicable line_items' do
-      allow(promo).to receive(:applicable?).with(foo).and_return false
-      allow(promo).to receive(:applicable?).with(baz).and_return true
+      it 'doubles the quantity to meet buy-one-get-one rule' do
+        promo.apply(checkout)
 
-      promo.apply(checkout)
-      expect(foo).not_to have_received(:quantity=)
-      expect(baz).to have_received(:quantity=).with(2)
+        expect(bar).to have_received(:quantity=).with(6)
+      end
     end
   end
 end

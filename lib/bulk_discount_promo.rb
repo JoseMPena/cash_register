@@ -1,28 +1,23 @@
 # frozen_string_literal: true
 
 require 'promotion'
+require_relative 'mixins/bulk_promotable'
 
 # Applies 0,50 discount when buying 3 or more of a product
 class BulkDiscountPromo < Promotion
-  DISCOUNT_AMOUNT = 0.50
+  DISCOUNTED_AMOUNT = 0.50
 
-  def applicable?(entity)
-    super(entity) && expected_quantity?(entity)
+  include BulkPromotable
+
+  attr_reader :discounted_amount
+
+  def initialize(promotable:, discount: DISCOUNTED_AMOUNT)
+    super(promotable:)
+    @discounted_amount = discount
   end
 
   def apply(checkout)
-    applicable_line_items(checkout).each { |li| li.price -= DISCOUNT_AMOUNT }
-  end
-
-  private
-
-  def expected_quantity?(entity)
-    if entity.respond_to?(:line_items)
-      entity.line_items.any? { |li| expected_quantity?(li) }
-    elsif entity.respond_to?(:quantity)
-      entity.quantity >= 3
-    else
-      false
-    end
+    applicable_line_items(checkout)
+      .each { |li| li.price -= discounted_amount }
   end
 end

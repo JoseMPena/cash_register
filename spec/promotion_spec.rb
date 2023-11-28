@@ -20,9 +20,9 @@ describe Promotion do
   end
 
   describe '#applicable?' do
-    let(:checkout) { instance_double(Checkout) }
-    let(:foo) { instance_double(LineItem, code: 'product', price: 1.99, quantity: 1) }
-    let(:baz) { instance_double(LineItem, code: 'baz', price: 1.99, quantity: 1) }
+    let(:checkout) { instance_double('Checkout') }
+    let(:foo) { instance_double('LineItem', code: 'product', price: 1.99, quantity: 1) }
+    let(:baz) { instance_double('LineItem', code: 'baz', price: 1.99, quantity: 1) }
 
     context 'when it has promotable products and checkout includes promotable products' do
       before { allow(checkout).to receive(:line_items).and_return([foo]) }

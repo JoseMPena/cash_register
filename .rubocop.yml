@@ -17,3 +17,15 @@ AllCops:
   TargetRubyVersion: 3.1.2
   NewCops: enable
   SuggestExtensions: false
+
+RSpec/VerifiedDoubleReference:
+  Enabled: false
+
+RSpec/ContextWording:
+  Enabled: false
+
+RSpec/NestedGroups:
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  Enabled: false

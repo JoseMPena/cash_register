@@ -43,4 +43,30 @@ describe BuyOneGetOnePromotion do
       end
     end
   end
+
+  describe '#apply' do
+    let(:promo) { subject }
+
+    before do
+      [foo, baz].each { |mock| allow(mock).to receive(:quantity=).with(anything) }
+      allow(checkout).to receive(:line_items).and_return [foo, baz]
+    end
+
+    it 'increases the quantity of applicable line_items by 1' do
+      allow(promo).to receive(:applicable?).with(anything).and_return true
+
+      promo.apply(checkout)
+      expect(foo).to have_received(:quantity=).with(2)
+      expect(baz).to have_received(:quantity=).with(2)
+    end
+
+    it 'does not increase the quantity of non-applicable line_items' do
+      allow(promo).to receive(:applicable?).with(foo).and_return false
+      allow(promo).to receive(:applicable?).with(baz).and_return true
+
+      promo.apply(checkout)
+      expect(foo).not_to have_received(:quantity=)
+      expect(baz).to have_received(:quantity=).with(2)
+    end
+  end
 end

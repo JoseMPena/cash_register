@@ -15,14 +15,14 @@ describe Promotion do
 
   describe '#apply' do
     it 'raises a NotImplementedError' do
-      expect { subject.apply({}) }.to raise_error(NotImplementedError)
+      expect { promotion.apply({}) }.to raise_error(NotImplementedError)
     end
   end
 
   describe '#applicable?' do
-    let(:checkout) { instance_double("Checkout") }
-    let(:foo) { instance_double("LineItem", code: 'product', price: 1.99, quantity: 1) }
-    let(:baz) { instance_double("LineItem", code: 'baz', price: 1.99, quantity: 1) }
+    let(:checkout) { instance_double(Checkout) }
+    let(:foo) { instance_double(LineItem, code: 'product', price: 1.99, quantity: 1) }
+    let(:baz) { instance_double(LineItem, code: 'baz', price: 1.99, quantity: 1) }
 
     context 'when it has promotable products and checkout includes promotable products' do
       before { allow(checkout).to receive(:line_items).and_return([foo]) }
@@ -48,7 +48,7 @@ describe Promotion do
       context 'and it scanned non-promotable products' do
         before { allow(checkout).to receive(:line_items).and_return([baz]) }
 
-        it { expect(subject.applicable?(checkout)).to be false }
+        it { expect(promotion.applicable?(checkout)).to be false }
       end
     end
   end

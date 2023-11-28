@@ -21,4 +21,8 @@ class Promotion
       false
     end
   end
+
+  def applicable_line_items(checkout)
+    checkout.line_items.select { |li| applicable?(li) }
+  end
 end

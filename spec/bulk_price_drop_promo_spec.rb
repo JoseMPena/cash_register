@@ -42,17 +42,17 @@ describe BulkPriceDropPromo do
   end
 
   describe '#apply' do
-    let(:coffee) { instance_double('LineItem', code: 'GR1', price: 11.23, quantity: 3) }
+    let(:coffee) { instance_double('LineItem', code: 'GR1', original_price: 11.23, quantity: 1) }
     let(:checkout) { instance_double('Checkout', line_items: [coffee]) }
 
-    before { allow(coffee).to receive(:price=).with(anything) }
+    before { allow(coffee).to receive(:final_price=) }
 
     context 'when it is applicable' do
       before { allow(promo).to receive(:applicable?).with(anything).and_return true }
 
       it 'adjusts the price with a discount of 2/3 of the original price' do
         promo.apply(checkout)
-        expect(coffee).to have_received(:price=).with(7.49)
+        expect(coffee).to have_received(:final_price=).with(7.49)
       end
     end
 
@@ -61,7 +61,7 @@ describe BulkPriceDropPromo do
 
       it 'does not adjust the price with discounts' do
         promo.apply(checkout)
-        expect(coffee).not_to have_received(:price)
+        expect(coffee).not_to have_received(:final_price=)
       end
     end
 
@@ -72,15 +72,15 @@ describe BulkPriceDropPromo do
 
       before do
         allow(promo).to receive(:applicable?).with(anything).and_return true
-        allow(coffee2).to receive(:price=)
-        allow(strawberry).to receive(:price=)
+        allow(coffee2).to receive(:final_price=)
+        allow(strawberry).to receive(:final_price=)
       end
 
       it 'adjusts the price on the promotable item only' do
         promo.apply(checkout)
-        expect(coffee2).not_to have_received(:price=)
-        expect(strawberry).not_to have_received(:price=)
-        expect(coffee).to have_received(:price=).with(7.49)
+        expect(coffee2).not_to have_received(:final_price=)
+        expect(strawberry).not_to have_received(:final_price=)
+        expect(coffee).to have_received(:final_price=).with(7.49)
       end
     end
   end

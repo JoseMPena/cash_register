@@ -5,8 +5,8 @@ require 'buy_one_get_one_promotion'
 
 describe BuyOneGetOnePromotion do
   let(:checkout) { instance_double('Checkout') }
-  let(:foo) { instance_double('LineItem', code: 'FOO', price: 1.99, quantity: 1) }
-  let(:baz) { instance_double('LineItem', code: 'BAZ', price: 1.99, quantity: 1) }
+  let(:foo) { instance_double('LineItem', code: 'FOO', original_price: 1.99, quantity: 1) }
+  let(:baz) { instance_double('LineItem', code: 'BAZ', original_price: 1.99, quantity: 1) }
 
   describe '#apply' do
     let(:promo) { subject }
@@ -36,7 +36,7 @@ describe BuyOneGetOnePromotion do
     end
 
     context 'when line_items have high quantity' do
-      let(:bar) { instance_double('LineItem', code: 'BAZ', price: 1.99, quantity: 3) }
+      let(:bar) { instance_double('LineItem', code: 'BAZ', original_price: 1.99, quantity: 3) }
 
       before do
         allow(promo).to receive(:applicable?).with(bar).and_return true

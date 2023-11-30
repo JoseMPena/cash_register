@@ -78,6 +78,7 @@ describe Checkout do
       expect(checkout.total).to eq 19.34
     end
 
+    # Integration tests
     context 'when buy-on-get-one promo is added' do
       let(:two_for_one) { BuyOneGetOnePromo.new(promotable: ['GR1']) }
       let(:checkout) { described_class.new(promotions: [two_for_one]) }

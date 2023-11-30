@@ -2,9 +2,6 @@
 
 require 'rspec'
 require 'checkout'
-require 'buy_one_get_one_promotion'
-require 'bulk_discount_promo'
-require 'bulk_price_drop_promo'
 
 describe Checkout do
   let(:checkout) { described_class.new }

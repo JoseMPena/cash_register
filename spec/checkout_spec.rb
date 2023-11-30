@@ -2,6 +2,9 @@
 
 require 'rspec'
 require 'checkout'
+require_relative '../lib/buy_one_get_one_promo'
+require_relative '../lib/bulk_discount_promo'
+require_relative '../lib/bulk_price_drop_promo'
 
 describe Checkout do
   let(:checkout) { described_class.new }
@@ -80,7 +83,7 @@ describe Checkout do
       let(:checkout) { described_class.new(promotions: [two_for_one]) }
 
       before do
-        checkout.add_item(tea)
+        2.times { checkout.add_item(tea) }
       end
 
       it 'applies the promotion' do

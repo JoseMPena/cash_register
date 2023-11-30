@@ -5,11 +5,11 @@ class LineItem
   attr_reader :code, :original_price
   attr_accessor :quantity, :final_price
 
-  def initialize(code:, price:, quantity: 0)
+  def initialize(code:, price:, quantity: 1)
     @code = code
     @original_price = price
-    @final_price = price
     @quantity = quantity
+    reset!
   end
 
   def self.from_product(product)
@@ -17,6 +17,6 @@ class LineItem
   end
 
   def reset!
-    @final_price = @original_price
+    self.final_price = original_price * quantity
   end
 end

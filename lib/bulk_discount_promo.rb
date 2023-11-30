@@ -27,6 +27,6 @@ class BulkDiscountPromo < Promotion
 
   def discounted_price_quantity(price, quantity)
     discounted_unit_price = BigDecimal((price - discounted_amount).to_s)
-    (discounted_unit_price * quantity).round(2)
+    (discounted_unit_price * quantity).round(2).to_f
   end
 end

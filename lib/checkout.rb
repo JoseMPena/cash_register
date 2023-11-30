@@ -1,51 +1,58 @@
 # frozen_string_literal: true
 
-require 'line_item'
+require_relative 'line_item'
 
 # Abstracts the checkout functionality
 class Checkout
-  def initialize(promotions: [], line_items: {})
-    @current_promotions = promotions
-    @current_line_items = line_items
+  attr_accessor :promotions, :line_items
+
+  def initialize(promotions: [], line_items: [])
+    @promotions = promotions
+    @line_items = line_items
     @total = 0.00
   end
 
-  def promotions
-    @current_promotions
-  end
-
-  def line_items
-    @current_line_items.values
-  end
-
   def add_item(product)
-    item = LineItem.from_product(product)
-    @current_line_items[item.code] ||= item
-    @current_line_items[item.code].quantity += 1
-    recalculate
+    current_line_item = get_line_item(product.code)
+    if current_line_item
+      current_line_item.quantity += 1
+    else
+      line_items << LineItem.from_product(product)
+    end
+    recalculate_with(product.code)
   end
 
   def remove_item(code)
-    raise ArgumentError, "Item with code #{code} does not exist" unless
-      @current_line_items[code]
+    current_line_item = get_line_item(code)
+    raise ArgumentError, "Item with code #{code} does not exist" unless current_line_item
 
-    @current_line_items[code].quantity -= 1
-    @current_line_items.delete_if { |_k, v| v.quantity < 1 }
-    recalculate
+    current_line_item.quantity -= 1
+    line_items.delete_if { |li| li.quantity < 1 }
+    recalculate_with(code)
   end
 
   def total
-    @current_line_items.values.sum(&:final_price)
+    line_items.sum(&:final_price)
+  end
+
+  def empty!
+    self.line_items = []
   end
 
   private
 
-  def recalculate
-    reset_line_items
-    @current_promotions.each { |promo| promo.apply(self) }
+  def get_line_item(code)
+    line_items.find { |li| li.code == code }
   end
 
-  def reset_line_items
-    @current_line_items.each_value(&:reset!)
+  def recalculate_with(product_code)
+    reset_line_items(product_code)
+    promotions.find do |promo|
+      promo.promotable_products.include?(product_code)
+    end&.apply(self)
+  end
+
+  def reset_line_items(item_code)
+    line_items.find { |li| li.code == item_code }&.reset!
   end
 end

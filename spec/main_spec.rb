@@ -16,20 +16,20 @@ RSpec.describe Main do
     before { main.prepare }
 
     it 'prepares products' do
-      products = main.instance_variable_get(:@products)
+      products = main.products
       expect(products.size).to eq(3)
       expect(products.map(&:code)).to eq %w[GR1 SR1 CF1]
     end
 
     it 'prepares promotions' do
-      promotions = main.instance_variable_get(:@promotions)
+      promotions = main.promotions
 
       expect(promotions.size).to eq(3)
       expect(promotions.map(&:promotable_products)).to eq %w[GR1 SR1 CF1]
     end
 
     it 'prepares a checkout' do
-      checkout = main.instance_variable_get(:@checkout)
+      checkout = main.checkout
 
       expect(checkout).to be_a(Checkout)
     end
@@ -41,8 +41,8 @@ RSpec.describe Main do
     end
 
     it 'tries to add a product to the checkout' do
-      coffee = main.instance_variable_get(:@products).detect { |p| p.code == 'CF1' }
-      checkout = main.instance_variable_get(:@checkout)
+      coffee = main.products.detect { |p| p.code == 'CF1' }
+      checkout = main.checkout
       allow(checkout).to receive(:add_item)
 
       main.add('CF1')
@@ -55,8 +55,8 @@ RSpec.describe Main do
   end
 
   describe '#remove' do
-    let(:checkout) { main.instance_variable_get(:@checkout) }
-    let(:coffee) { main.instance_variable_get(:@products).detect { |p| p.code == 'CF1' } }
+    let(:checkout) { main.checkout }
+    let(:coffee) { main.products.detect { |p| p.code == 'CF1' } }
 
     before do
       main.prepare

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'promotion'
 require 'bigdecimal'
+require_relative 'promotion'
 require_relative 'mixins/bulk_promotable'
 
 # Applies 0,50 discount when buying 3 or more of a product

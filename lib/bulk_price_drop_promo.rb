@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'promotion'
 require 'bigdecimal'
+require_relative 'promotion'
 require_relative 'mixins/bulk_promotable'
 
 # Adjusts the price to a given fraction on applicable items

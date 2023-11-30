@@ -3,7 +3,7 @@
 require 'rspec'
 require 'buy_one_get_one_promotion'
 
-describe BuyOneGetOnePromotion do
+describe BuyOneGetOnePromo do
   let(:checkout) { instance_double('Checkout') }
   let(:foo) { instance_double('LineItem', code: 'FOO', original_price: 1.99, quantity: 1) }
   let(:baz) { instance_double('LineItem', code: 'BAZ', original_price: 1.99, quantity: 1) }

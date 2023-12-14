@@ -8,7 +8,6 @@ require './lib/checkout'
 
 # Application's entry point
 class Main
-
   attr_reader :products, :promotions, :checkout
 
   def prepare

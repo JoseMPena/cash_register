@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rspec'
+require 'rails_helper'
 require 'bulk_price_drop_promo'
 
 describe BulkPriceDropPromo do

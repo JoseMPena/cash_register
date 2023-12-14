@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rspec'
+require 'rails_helper'
 
 require './lib/buy_one_get_one_promo'
 require './lib/bulk_discount_promo'

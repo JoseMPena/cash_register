@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rspec'
+require 'rails_helper'
 require 'buy_one_get_one_promo'
 
 describe BuyOneGetOnePromo do

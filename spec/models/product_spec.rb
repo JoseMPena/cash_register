@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
-require 'rspec'
-require 'product'
+require 'rails_helper'
 
-describe Product do
-  subject { described_class.new(code: 'PR1', name: 'A Product', price: 1.99) }
+RSpec.describe Product do
+  subject { described_class.new(attributes_for(:product)) }
 
   context 'accessors' do
     it { is_expected.to respond_to(:code) }

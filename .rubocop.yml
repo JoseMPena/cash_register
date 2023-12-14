@@ -19,6 +19,7 @@ AllCops:
   SuggestExtensions: false
   Exclude:
     - "./bin/*"
+    - "./db/migrate/*"
 
 RSpec/VerifiedDoubleReference:
   Enabled: false
